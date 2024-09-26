@@ -281,9 +281,6 @@ public class QuizGUI extends JFrame {
             questaoAtual++;
 
             pont += valorQst;
-            if (pont > 10) {
-                pont = 10;
-            }
         } else {
             lblResultado.setText("Você errou. A resposta correta é: " + u.getAlt_correta());
             lblResultado.setForeground(new Color(231, 76, 60));
@@ -321,7 +318,6 @@ public class QuizGUI extends JFrame {
     private void reiniciarQuiz() {
         pont = 0;
         questaoAtual = 0;
-        maxQuest = 10;
         usados.clear();
         lblPontuacao.setText("Pontuação: 0.0");
         btnProxima.setEnabled(true);
