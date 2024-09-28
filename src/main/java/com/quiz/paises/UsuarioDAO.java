@@ -74,8 +74,8 @@ public class UsuarioDAO {
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
 
-            ranke.append(String.format("%-8s | %-15s | %-6s | %-5s%n", "Posição", "Nome", "Pontos", "Tempo em s"));
-            ranke.append("----------------------------------------------").append(System.lineSeparator());
+            ranke.append(String.format("%-7s | %-15s | %-6s | %-7s%n", "Posição", "Nome", "Pontos", "Tempo"));
+            ranke.append("--------------------------------------------------------------").append(System.lineSeparator());
 
             int i = 1;
             while (rs.next()) {
@@ -83,7 +83,7 @@ public class UsuarioDAO {
                 float pontos = rs.getFloat("pontos");
                 float tempo = rs.getFloat("tempo");
 
-                ranke.append(String.format("%-8d | %-15s | %-6.1f | %-5.1f%n", i, nome, pontos, tempo));
+                ranke.append(String.format("%-7d | %-15s | %-6.1f | %-7.1fs%n", i, nome, pontos, tempo));
                 i++;
             }
         } catch (SQLException e) {
