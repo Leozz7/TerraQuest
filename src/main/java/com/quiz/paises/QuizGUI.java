@@ -212,11 +212,11 @@ public class QuizGUI extends JFrame {
 
         do {
             if (perg == 1) {
-                pais = random.nextInt(48 - 1 + 1) + 1;
+                pais = random.nextInt(50 - 1 + 1) + 1;
             } else if (perg == 2) {
-                pais = random.nextInt(94 - 49 + 1) + 49;
+                pais = random.nextInt(100 - 51 + 1) + 51;
             } else {
-                pais = random.nextInt(150 - 95 + 1) + 95;
+                pais = random.nextInt(150 - 101 + 1) + 101;
             }
         } while (usados.contains(pais));
         usados.add(pais);

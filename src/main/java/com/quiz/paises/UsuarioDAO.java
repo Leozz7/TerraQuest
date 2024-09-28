@@ -75,7 +75,7 @@ public class UsuarioDAO {
              ResultSet rs = ps.executeQuery()) {
 
             ranke.append(String.format("%-7s | %-15s | %-6s | %-7s%n", "Posição", "Nome", "Pontos", "Tempo"));
-            ranke.append("--------------------------------------------------------------").append(System.lineSeparator());
+            ranke.append("------------------------------------------------").append(System.lineSeparator());
 
             int i = 1;
             while (rs.next()) {
