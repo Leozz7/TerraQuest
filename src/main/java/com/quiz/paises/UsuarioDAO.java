@@ -46,7 +46,7 @@ public class UsuarioDAO {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao executar consulta: " + e.getMessage());
+            System.err.println("Erro ao executar consulta");
         }
     }
 

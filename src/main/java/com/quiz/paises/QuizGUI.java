@@ -50,17 +50,19 @@ public class QuizGUI extends JFrame {
     private final Random random = new Random();
     private final ArrayList<Integer> usados = new ArrayList<>();
     private long tempoInicio;
-    private int maxQuest = 10;
+    private final int maxQuest = 10;
+    private Timer cronometro;
 
-    private JLabel lblPergunta;
-    private RoundedButton[] btnRespostas;
-    private RoundedButton btnDica;
-    private JLabel lblResultado;
-    private RoundedButton btnProxima;
-    private JLabel lblPontuacao;
-    private RoundedButton btnJogarNovamente;
-    private RoundedButton btnExibirRank;
-    private RoundedButton btnIniciar;
+    private final JLabel lblPergunta;
+    private final RoundedButton[] btnRespostas;
+    private final RoundedButton btnDica;
+    private final JLabel lblResultado;
+    private final RoundedButton btnProxima;
+    private final JLabel lblPontuacao;
+    private final RoundedButton btnJogarNovamente;
+    private final RoundedButton btnExibirRank;
+    private final RoundedButton btnIniciar;
+    private final JLabel lblCronometro;
 
     public QuizGUI() {
         setTitle("TerraQuest - Quiz de Países");
@@ -94,6 +96,18 @@ public class QuizGUI extends JFrame {
         btnDica = new RoundedButton("Dica", 20, 20);
         btnDica.setBackground(new Color(241, 196, 15));
 
+        btnJogarNovamente = new RoundedButton("Jogar Novamente", 20, 20);
+        btnJogarNovamente.setBackground(new Color(39, 174, 96));
+        btnJogarNovamente.setVisible(false);
+
+        btnExibirRank = new RoundedButton("Exibir Rank", 20, 20);
+        btnExibirRank.setBackground(new Color(255,105,97));
+        btnExibirRank.setVisible(false);
+
+        lblCronometro = new JLabel("Tempo: 0s", SwingConstants.CENTER);
+        lblCronometro.setFont(new Font("Verdana", Font.BOLD, 20));
+        lblCronometro.setForeground(new Color(52, 152, 219));
+
         btnRespostas = new RoundedButton[4];
         Color respostaColor = new Color(52, 152, 219);
 
@@ -123,21 +137,14 @@ public class QuizGUI extends JFrame {
         panelInferior.add(btnDica);
         panelInferior.add(btnProxima);
         panelInferior.add(btnIniciar);
+        panelInferior.add(btnJogarNovamente);
+        panelInferior.add(btnExibirRank);
 
-        JPanel panelSuperior = new JPanel(new GridLayout(2, 1));
+        JPanel panelSuperior = new JPanel(new GridLayout(3, 1));
         panelSuperior.setOpaque(false);
         panelSuperior.add(lblPontuacao);
+        panelSuperior.add(lblCronometro);
         panelSuperior.add(lblResultado);
-
-        btnJogarNovamente = new RoundedButton("Jogar Novamente", 20, 20);
-        btnJogarNovamente.setBackground(new Color(39, 174, 96));
-        btnJogarNovamente.setVisible(false);
-        panelInferior.add(btnJogarNovamente);
-
-        btnExibirRank = new RoundedButton("Exibir Rank", 20, 20);
-        btnExibirRank.setBackground(new Color(255,105,97));
-        btnExibirRank.setVisible(false);
-        panelInferior.add(btnExibirRank);
 
         add(panelSuperior, BorderLayout.NORTH);
         add(panelCentral, BorderLayout.CENTER);
@@ -168,6 +175,7 @@ public class QuizGUI extends JFrame {
             btnIniciar.setVisible(false);
             btnProxima.setVisible(true);
             tempoInicio = System.currentTimeMillis();
+            iniciarCronometro();
         });
 
         btnExibirRank.addActionListener(e -> {
@@ -186,17 +194,32 @@ public class QuizGUI extends JFrame {
     }
 
     private void pedirNome() {
-        String nomeJogador = JOptionPane.showInputDialog("Digite seu nome:");
-        if (nomeJogador != null && !nomeJogador.trim().isEmpty()) {
-            u.setNome(nomeJogador);
-            reiniciarQuiz();
-        } else {
-            JOptionPane.showMessageDialog(null, "Nome não pode ser vazio.");
-        }
+        String nomeJogador;
+        do {
+            nomeJogador = JOptionPane.showInputDialog("Digite seu nome:");
+            if (nomeJogador != null && !nomeJogador.trim().isEmpty()) {
+                u.setNome(nomeJogador);
+                reiniciarQuiz();
+                break;
+            } else if (nomeJogador != null) {
+                JOptionPane.showMessageDialog(null, "Nome não pode ser vazio.");
+            }
+        } while (nomeJogador == null || nomeJogador.trim().isEmpty());
     }
+
 
     private void novaQuestao() {
         perguntaAlternativa();
+    }
+
+    private void iniciarCronometro() {
+        cronometro = new Timer(1000, e -> {
+            long tempoAtual = System.currentTimeMillis();
+            long tempoPassado = tempoAtual - tempoInicio;
+            int segundos = (int) (tempoPassado / 1000);
+            lblCronometro.setText("Tempo: " + segundos + "s");
+        });
+        cronometro.start();
     }
 
     private void perguntaAlternativa() {
@@ -299,12 +322,14 @@ public class QuizGUI extends JFrame {
     }
 
     private void fimDoQuiz() {
+
         long tempoFim = System.currentTimeMillis();
         long tempoTotal = tempoFim - tempoInicio;
         float tempoTotalSegundos = tempoTotal / 1000f;
+        cronometro.stop();
 
         lblPergunta.setText("Quiz Finalizado!");
-        lblResultado.setText(String.format("Pontuação Total: %.1f/10.0 Tempo: %.2f segundos", pont, tempoTotalSegundos));
+        lblResultado.setText(String.format("Pontuação Total: %.1f/10.0", pont));
         btnProxima.setEnabled(false);
         btnJogarNovamente.setVisible(true);
         btnExibirRank.setVisible(true);
