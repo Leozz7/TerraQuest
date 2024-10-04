@@ -178,6 +178,7 @@ public class QuizGUI extends JFrame {
             iniciarCronometro();
         });
 
+
         btnExibirRank.addActionListener(e -> {
             habilitarBotoesRespostas(false);
             sumirBotoesResposta(false);
@@ -213,6 +214,10 @@ public class QuizGUI extends JFrame {
     }
 
     private void iniciarCronometro() {
+        if (cronometro != null) {
+            cronometro.stop();
+        }
+
         cronometro = new Timer(1000, e -> {
             long tempoAtual = System.currentTimeMillis();
             long tempoPassado = tempoAtual - tempoInicio;
@@ -351,6 +356,7 @@ public class QuizGUI extends JFrame {
         habilitarBotoesRespostas(true);
         sumirBotoesResposta(true);
         novaQuestao();
+        iniciarCronometro();
     }
 
     public static void main(String[] args) {
