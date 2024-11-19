@@ -1,9 +1,14 @@
 package com.quiz.paises;
 
 import com.quiz.paises.entity.Usuario;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -194,6 +199,21 @@ public class QuizGUI extends JFrame {
         btnProxima.setEnabled(true);
     }
 
+    private void play(String nomeAudio) {
+        try {
+
+            URL url = getClass().getResource("/" + nomeAudio + ".wav");
+
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Erro ao reproduzir áudio: " + e.getMessage());
+        }
+    }
+
     private void pedirNome() {
         String nomeJogador;
         do {
@@ -306,12 +326,14 @@ public class QuizGUI extends JFrame {
         if (resps[idx].equals(u.getAlt_correta())) {
             lblResultado.setText("Você acertou!");
             lblResultado.setForeground(new Color(46, 204, 113));
+            play("acertou");
             questaoAtual++;
 
             pont += valorQst;
         } else {
             lblResultado.setText("Você errou. A resposta correta é: " + u.getAlt_correta());
             lblResultado.setForeground(new Color(231, 76, 60));
+            play("errou");
             questaoAtual++;
         }
         lblPontuacao.setText("Pontuação: " + pont);
